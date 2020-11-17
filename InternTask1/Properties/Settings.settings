@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="InternTask1.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="NestingDegree" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="CsvFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">report</Value>
+    </Setting>
+    <Setting Name="CsvFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\HasanovE\source\repos\InternTask1\InternTask1</Value>
+    </Setting>
+    <Setting Name="ExpEmail" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="EmailForSending" Type="System.String" Scope="User">
+      <Value Profile="(Default)">interntask1@inbox.ru</Value>
+    </Setting>
+    <Setting Name="PasswordEFS" Type="System.String" Scope="User">
+      <Value Profile="(Default)">G3dS[pyaaJD3</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
