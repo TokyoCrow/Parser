@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace InternTask1.Classes
+namespace InternTask1
 {
     public static class Configuration
     {

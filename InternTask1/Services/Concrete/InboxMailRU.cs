@@ -1,15 +1,12 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
 using InternTask1.Properties;
+using InternTask1.Services.Abstract;
 
-namespace InternTask1.Classes
+namespace InternTask1.Services.Concrete
 {
-    interface ISendEmail
-    {
-        void Send(StringBuilder mailText);
-    }
-
     public class InboxMailRU : ISendEmail
     {
         readonly string host = "smtp.mail.ru";
@@ -25,7 +22,14 @@ namespace InternTask1.Classes
                 message.Body = mailText.ToString();
                 smtp.Credentials = new NetworkCredential(Settings.Default.EmailForSending, Settings.Default.PasswordEFS);
                 smtp.EnableSsl = true;
-                await smtp.SendMailAsync(message);
+                try 
+                { 
+                    await smtp.SendMailAsync(message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
         }
     }

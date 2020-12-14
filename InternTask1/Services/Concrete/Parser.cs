@@ -1,4 +1,5 @@
 ﻿using InternTask1.Models;
+using InternTask1.Services.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,23 +7,25 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace InternTask1.Classes
+namespace InternTask1.Services.Concrete
 {
-    public class Parser
+    public class Parser: BaseParser
     {
         private static readonly Regex regHref = new Regex(@"<a[^>]+href=""([^""]+)""");
         private static readonly Regex regUrlStandart = new Regex(@"^http");
 
         private readonly string websiteUrl;
-        public StringBuilder Errors { get; private set; }
-        public List<Website> WebsitesInfo { get; private set; }
+
+        private StringBuilder errors;
+        public override StringBuilder Errors { get { return errors; } }
+        public IEnumerable<Website> WebsitesInfo { get; private set; }
         public Parser(string url)
         {
             websiteUrl = UrlStandartization(url);
-            Errors = new StringBuilder();
+            errors = new StringBuilder();
             WebsitesInfo = GetUrlNStatusCode(websiteUrl, Configuration.NestingDegree);
         }
-        private List<Website> GetUrlNStatusCode(string url, int nestingDegree)
+        private IEnumerable<Website> GetUrlNStatusCode(string url, int nestingDegree)
         {
             var urlsNStatusCode = new List<Website>();
             try
@@ -47,7 +50,7 @@ namespace InternTask1.Classes
             }
             catch (Exception e) 
             {
-                Errors.Append($"{url}:\n{e.Message}\n");
+                errors.Append($"{url}:\n{e.Message}\n");
             }
             return urlsNStatusCode;
         }
@@ -59,7 +62,7 @@ namespace InternTask1.Classes
                 return (int)response.StatusCode;
         }
 
-        public List<Website> ShieldedUrls() =>
+        public override IEnumerable<Website> ShieldedUrls() =>
             WebsitesInfo.Select(ws => new Website($"\"{ws.Url}\"", ws.StatusCode)).ToList();
         
         private string UrlStandartization(string url)

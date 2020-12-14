@@ -1,4 +1,4 @@
-﻿using InternTask1.Classes;
+﻿using InternTask1.Services.Concrete;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +11,7 @@ namespace InternTask1
         private const int footerLine = 100;
 
         static int choose = 0;
+
         static void Main(string[] args)
         {
             do
@@ -26,7 +27,7 @@ namespace InternTask1
                         case 1:
                             {
                                 Console.Write("Please, enter website url:");
-                                string url = Console.ReadLine();
+                                var url = Console.ReadLine();
                                 isInProgress = true;
                                 InProgress();
                                 var parser = new Parser(url);

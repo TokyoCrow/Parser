@@ -55,9 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Configuration.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Models\Website.cs" />
-    <Compile Include="Classes\Parser.cs" />
+    <Compile Include="Services\Abstract\BaseParser.cs" />
+    <Compile Include="Services\Concrete\Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -65,8 +66,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Repository.cs" />
-    <Compile Include="Classes\SendEmail.cs" />
+    <Compile Include="Services\Concrete\CsvFile.cs" />
+    <Compile Include="Services\Abstract\IRepository.cs" />
+    <Compile Include="Services\Concrete\InboxMailRU.cs" />
+    <Compile Include="Services\Abstract\ISendEmail.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -75,6 +78,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
