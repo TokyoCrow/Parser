@@ -30,16 +30,16 @@ namespace InternTask1.Services.Concrete
             var urlsNStatusCode = new List<Website>();
             try
             {
-                Uri uri = new Uri(url, UriKind.RelativeOrAbsolute);
+                var uri = new Uri(url, UriKind.RelativeOrAbsolute);
                 int statusCode = GetStatusCode(uri);
                 urlsNStatusCode.Add(new Website(url, statusCode));
                 if (nestingDegree != 0 && statusCode >= 200 && statusCode < 300)
                 {
-                    string html = new WebClient().DownloadString(uri);
+                    var html = new WebClient().DownloadString(uri);
                     foreach (Match match in regHref.Matches(html))
                     {
-                        Uri uri1 = new Uri(match.Groups[1].ToString(), UriKind.RelativeOrAbsolute);
-                        if (uri1.IsAbsoluteUri)
+                        var nestedUri = new Uri(match.Groups[1].ToString(), UriKind.RelativeOrAbsolute);
+                        if (nestedUri.IsAbsoluteUri)
                             urlsNStatusCode.AddRange(GetUrlNStatusCode(match.Groups[1].ToString(), 
                                 nestingDegree - 1));
                         else
@@ -48,17 +48,17 @@ namespace InternTask1.Services.Concrete
                     }
                 }
             }
-            catch (Exception e) 
+            catch (Exception ex) 
             {
-                errors.Append($"{url}:\n{e.Message}\n");
+                errors.Append($"{url}:\n{ex.Message}\n");
             }
             return urlsNStatusCode;
         }
 
         private int GetStatusCode(Uri uri)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            var request = (HttpWebRequest)WebRequest.Create(uri);
+            using (var response = (HttpWebResponse)request.GetResponse())
                 return (int)response.StatusCode;
         }
 
