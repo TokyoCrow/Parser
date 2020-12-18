@@ -1,4 +1,6 @@
-﻿using InternTask1.Services.Concrete;
+﻿using InternTask1.Services.Abstract;
+using InternTask1.Services.Concrete;
+using Ninject;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +16,7 @@ namespace InternTask1
 
         static void Main(string[] args)
         {
+            IKernel kernel = new StandardKernel(new AppNinject());
             do
             {
                 ShowConfig();
@@ -30,11 +33,13 @@ namespace InternTask1
                                 var url = Console.ReadLine();
                                 isInProgress = true;
                                 InProgress();
-                                var parser = new Parser(url);
-                                var csvFile = new CsvFile();
-                                var inbox = new InboxMailRU();
-                                csvFile.Save(parser.ShieldedUrls());
-                                inbox.Send(parser.Errors);
+                                BaseParser parser = kernel.Get<BaseParser>();
+                                parser.Url = url;
+                                parser.Initialize();
+                                IRepository repository = kernel.Get<IRepository>();
+                                ISendEmail mail = kernel.Get<ISendEmail>();
+                                repository.Save(parser.ShieldedUrls());
+                                mail.Send(parser.Errors);
                                 isInProgress = false;
                                 Console.Clear();
                                 Console.WriteLine("Complete!");

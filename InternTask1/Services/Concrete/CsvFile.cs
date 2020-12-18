@@ -12,7 +12,7 @@ namespace InternTask1.Services.Concrete
     {
         public async void Save(IEnumerable<Website> sites)
         {
-            string dateTime = DateTime.Now.ToString("HH.mm.ss|dd.MM.yy");
+            string dateTime = DateTime.Now.ToString("HH.mm.ss dd.MM.yy");
             var csvFileFullPath = $"{Configuration.CsvFilePath}{Configuration.CsvFileName}({dateTime}).csv";
             using (var streamWriter = new StreamWriter(csvFileFullPath))
             using (var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))

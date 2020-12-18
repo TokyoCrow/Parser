@@ -19,11 +19,10 @@ namespace InternTask1.Services.Concrete
         private StringBuilder errors;
         public override StringBuilder Errors { get { return errors; } }
         public IEnumerable<Website> WebsitesInfo { get; private set; }
-        public Parser(string url)
+        public override void Initialize()
         {
-            websiteUrl = UrlStandartization(url);
             errors = new StringBuilder();
-            WebsitesInfo = GetUrlNStatusCode(websiteUrl, Configuration.NestingDegree);
+            WebsitesInfo = GetUrlNStatusCode(UrlStandartization(this.Url), Configuration.NestingDegree);
         }
         private IEnumerable<Website> GetUrlNStatusCode(string url, int nestingDegree)
         {
