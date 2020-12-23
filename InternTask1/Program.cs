@@ -11,19 +11,18 @@ namespace InternTask1
     {
         private static bool isInProgress = false;
         private const int footerLine = 100;
+        private static IConfiguration configuration;
 
         static int choose = 0;
 
         static void Main(string[] args)
         {
             IKernel kernel = new StandardKernel(new AppNinject());
+            configuration = kernel.Get<IConfiguration>();
             do
             {
                 ShowConfig();
-                Console.WriteLine("Select the action:");
-                Console.WriteLine("1 - Start the programm.");
-                Console.WriteLine("2 - Make changes to the configuration file.");
-                Console.WriteLine("3 - Close console.");
+                ShowMainMenu();
                 if (int.TryParse(Console.ReadLine(), out choose))
                     switch (choose)
                     {
@@ -33,9 +32,8 @@ namespace InternTask1
                                 var url = Console.ReadLine();
                                 isInProgress = true;
                                 InProgress();
-                                BaseParser parser = kernel.Get<BaseParser>();
-                                parser.Url = url;
-                                parser.Initialize();
+                                IParser parser = kernel.Get<IParser>();
+                                parser.Initialize(url);
                                 IRepository repository = kernel.Get<IRepository>();
                                 ISendEmail mail = kernel.Get<ISendEmail>();
                                 repository.Save(parser.ShieldedUrls());
@@ -65,18 +63,30 @@ namespace InternTask1
             } while (choose != 3);
         }
 
+        static void ShowMainMenu()
+        {
+            Console.WriteLine("Select the action:");
+            Console.WriteLine("1 - Start the programm.");
+            Console.WriteLine("2 - Make changes to the configuration file.");
+            Console.WriteLine("3 - Close console.");
+        }
+
+        static void ShowConfigurationMenu()
+        {
+            Console.WriteLine("Select the action:");
+            Console.WriteLine("1 - Change nessing degree.");
+            Console.WriteLine("2 - Change report file name.");
+            Console.WriteLine("3 - Change report file path.");
+            Console.WriteLine("4 - Change email.");
+            Console.WriteLine("5 - Close cofiguration file menu.");
+        }
 
         static void ConfigurationSetting()
         {
             do
             {
-                ShowConfig();
-                Console.WriteLine("Select the action:");
-                Console.WriteLine("1 - Change nessing degree.");
-                Console.WriteLine("2 - Change report file name.");
-                Console.WriteLine("3 - Change report file path.");
-                Console.WriteLine("4 - Change email.");
-                Console.WriteLine("5 - Close cofiguration file menu.");
+                ShowConfig(); 
+                ShowConfigurationMenu();
                 if (int.TryParse(Console.ReadLine(), out choose))
                     switch (choose)
                     {
@@ -84,7 +94,7 @@ namespace InternTask1
                             {
                                 Console.WriteLine("Pealse set nessing degree. The degree must be a number greater than 0.");
                                 if (byte.TryParse(Console.ReadLine(), out byte degree))
-                                    Configuration.NestingDegree = degree;
+                                    configuration.SetNestingDegree(degree);
                                 else
                                     Console.WriteLine("The degree must be a number greater than 0.");
                                 Thread.Sleep(1000);
@@ -93,21 +103,24 @@ namespace InternTask1
                         case 2:
                             {
                                 Console.WriteLine("Pealse set report file name.");
-                                Configuration.CsvFileName = Console.ReadLine();
+                                var name = Console.ReadLine();
+                                configuration.SetCsvFileName(name);
                                 Thread.Sleep(1000);
                                 break;
                             }
                         case 3:
                             {
                                 Console.WriteLine("Pealse set report file path.");
-                                Configuration.CsvFilePath = Console.ReadLine();
+                                var path = Console.ReadLine();
+                                configuration.SetCsvFilePath(path);
                                 Thread.Sleep(1000);
                                 break;
                             }
                         case 4:
                             {
                                 Console.WriteLine("Pealse set email.");
-                                Configuration.ExpEmail = Console.ReadLine();
+                                var mail = Console.ReadLine();
+                                configuration.SetExpEmail(mail);
                                 Thread.Sleep(1000);
                                 break;
                             }

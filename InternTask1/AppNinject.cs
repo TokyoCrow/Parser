@@ -8,9 +8,10 @@ namespace InternTask1
     {
         public override void Load()
         {
-            Bind<BaseParser>().To<Parser>();
+            Bind<IParser>().To<Parser>();
             Bind<IRepository>().To<CsvFile>();
             Bind<ISendEmail>().To<InboxMailRU>();
+            Bind<IConfiguration>().To<ConfigFile>();
         }
     }
 }

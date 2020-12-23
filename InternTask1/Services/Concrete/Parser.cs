@@ -9,20 +9,19 @@ using System.Text.RegularExpressions;
 
 namespace InternTask1.Services.Concrete
 {
-    public class Parser: BaseParser
+    public class Parser: IParser
     {
         private static readonly Regex regHref = new Regex(@"<a[^>]+href=""([^""]+)""");
         private static readonly Regex regUrlStandart = new Regex(@"^http");
 
         private readonly string websiteUrl;
 
-        private StringBuilder errors;
-        public override StringBuilder Errors { get { return errors; } }
+        public  StringBuilder Errors { get; private set; }
         public IEnumerable<Website> WebsitesInfo { get; private set; }
-        public override void Initialize()
+        public void Initialize(string url)
         {
-            errors = new StringBuilder();
-            WebsitesInfo = GetUrlNStatusCode(UrlStandartization(this.Url), Configuration.NestingDegree);
+            Errors = new StringBuilder();
+            WebsitesInfo = GetUrlNStatusCode(UrlStandartization(url), Configuration.NestingDegree);
         }
         private IEnumerable<Website> GetUrlNStatusCode(string url, int nestingDegree)
         {
@@ -49,7 +48,7 @@ namespace InternTask1.Services.Concrete
             }
             catch (Exception ex) 
             {
-                errors.Append($"{url}:\n{ex.Message}\n");
+                Errors.Append($"{url}:\n{ex.Message}\n");
             }
             return urlsNStatusCode;
         }
@@ -61,7 +60,7 @@ namespace InternTask1.Services.Concrete
                 return (int)response.StatusCode;
         }
 
-        public override IEnumerable<Website> ShieldedUrls() =>
+        public IEnumerable<Website> ShieldedUrls() =>
             WebsitesInfo.Select(ws => new Website($"\"{ws.Url}\"", ws.StatusCode)).ToList();
         
         private string UrlStandartization(string url)
